@@ -10,5 +10,5 @@ void init(rack::Plugin *p)
 
 	p->addModel(rack::createModel<RingModulatorWidget>(
 		TOSTRING(MANUFACTURE_SLUG), TOSTRING(MANUFACTURE_NAME),
-		"RingModulator, "Ring Modulator"));
+		"RingModulator", "Ring Modulator"));
 }
