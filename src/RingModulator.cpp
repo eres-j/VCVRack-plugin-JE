@@ -4,8 +4,6 @@
 
 // STL
 #include <cmath>
-#include <atomic>
-#include <iostream>
 
 /*
 http://recherche.ircam.fr/pub/dafx11/Papers/66_e.pdf
@@ -53,7 +51,7 @@ struct RingModulator : rack::Module
 	};
 
 	RingModulator()
-	: Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS/*, NUM_LIGHTS*/)
+	: Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS)
 	{}
 
 	inline bool needToStep()
@@ -81,26 +79,6 @@ struct RingModulator : rack::Module
 		m_diode.setH(getParameterValue(DIODE_H_PARAM));
 	}
 
-	inline static float clampToAudioVoltage(const float v)
-	{
-		return rack::clampf(v, -g_audioPeakVoltage, g_audioPeakVoltage);
-	}
-
-	inline static float clampToControlVoltage(const float v)
-	{
-		return rack::clampf(v, -g_controlPeakVoltage, g_controlPeakVoltage);
-	}
-
-	inline void tickTime()
-	{
-		m_time += 1.f / 44100.f;
-	}
-
-	inline float vco_sin(float f) const
-	{
-		return sin(2.f * 3.1415f * f * m_time);
-	}
-
 	inline float getParameterValue(const ParamIds id) const
 	{
 		return params[id].value;
@@ -108,11 +86,7 @@ struct RingModulator : rack::Module
 
 	inline float getAudioInputValue(const InputIds id) const
 	{
-		/*if (id == INPUT_INPUT)
-			return vco_sin(50.f) * 10.f;
-		else if (id == CARRIER_INPUT)
-			return vco_sin(150.f) * 10.f;*/
-		return clampToAudioVoltage(inputs[id].value);
+		return inputs[id].value;
 	}
 
 	inline float getControlInputValue(const InputIds id) const
@@ -139,16 +113,14 @@ struct RingModulator : rack::Module
 
 	inline void step() override
 	{
-		tickTime();
-
 		if (!needToStep())
 			return;
 
 		updateDiodeCharacteristics();
 
 		const float vhin = getLeveledPolarizedInputValue(INPUT_INPUT, INPUT_POLARITY_PARAM, INPUT_LEVEL_PARAM) * 0.5f;
-		const float vc = clampToAudioVoltage(getLeveledPolarizedInputValue(CARRIER_INPUT, CARRIER_POLARITY_PARAM, CARRIER_LEVEL_PARAM) +
-			clampToControlVoltage(getParameterValue(CARRIER_OFFSET_PARAM) + getControlInputValue(CARRIER_OFFSET_INPUT)));
+		const float vc = getLeveledPolarizedInputValue(CARRIER_INPUT, CARRIER_POLARITY_PARAM, CARRIER_LEVEL_PARAM) +
+			getParameterValue(CARRIER_OFFSET_PARAM) + getControlInputValue(CARRIER_OFFSET_INPUT);
 
 		const float vc_plus_vhin = vc + vhin;
 		const float vc_minus_vhin = vc - vhin;
@@ -168,8 +140,6 @@ struct RingModulator : rack::Module
 
 private:
 	Diode m_diode;
-
-	float m_time = 0.f;
 };
 
 RingModulatorWidget::RingModulatorWidget()

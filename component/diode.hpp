@@ -3,8 +3,9 @@
 #include "utils/meta.hpp"
 #include "common/constants.hpp"
 
-// STL
-#include <array>
+/*
+http://recherche.ircam.fr/pub/dafx11/Papers/66_e.pdf
+*/
 
 class Diode
 {
@@ -20,10 +21,8 @@ public:
 			const float v_minus_vb = av - m_vb;
 			return m_h * v_minus_vb * v_minus_vb / m_vl_vb_denom;
 		}
-		else
-		{
-			return m_h * av - m_h_vl + m_vl_add;
-		}
+
+		return m_h * av - m_h_vl + m_vl_add;
 	}
 
 	inline void setVb(float newVb)
