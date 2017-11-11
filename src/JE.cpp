@@ -6,9 +6,10 @@ void init(rack::Plugin *p)
 {
 	plugin = p;
 	plugin->slug = "JE";
-	plugin->version = TOSTRING(VERSION);
+	plugin->name = TOSTRING(MANUFACTURE_NAME);
+	//plugin->version = TOSTRING(JE_VERSION);
 
-	p->addModel(rack::createModel<RingModulatorWidget>(
-		TOSTRING(MANUFACTURE_SLUG), TOSTRING(MANUFACTURE_NAME),
-		"RingModulator", "Ring Modulator"));
+	rack::createModel<RingModulatorWidget>(p,
+		/*TOSTRING(MANUFACTURE_SLUG), TOSTRING(MANUFACTURE_NAME),*/
+		"RingModulator", "Ring Modulator");
 }
