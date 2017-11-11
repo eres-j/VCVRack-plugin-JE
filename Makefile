@@ -5,7 +5,7 @@ SOURCES += $(wildcard components/*.cpp)
 SOURCES += $(wildcard utils/*.cpp)
 SOURCES += $(wildcard widgets/*.cpp)
 
-FLAGS += -I. -DJE_VERSION=0.0.1 -DMANUFACTURE_SLUG="JulienEres" -DMANUFACTURE_NAME="Julien Eres"
+FLAGS += -I. -DJE_VERSION=0.5.0 -DJE_MANUFACTURER="Julien Eres"
 
 include ../../plugin.mk
 

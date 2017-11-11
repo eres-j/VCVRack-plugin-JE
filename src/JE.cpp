@@ -6,10 +6,13 @@ void init(rack::Plugin *p)
 {
 	plugin = p;
 	plugin->slug = "JE";
-	plugin->name = TOSTRING(MANUFACTURE_NAME);
-	//plugin->version = TOSTRING(JE_VERSION);
+	plugin->version = TOSTRING(JE_VERSION);
+	plugin->website = "https://github.com/eres-j/VCVRack-plugin-JE";
+	plugin->manual = "https://github.com/eres-j/VCVRack-plugin-JE";
 
-	rack::createModel<RingModulatorWidget>(p,
-		/*TOSTRING(MANUFACTURE_SLUG), TOSTRING(MANUFACTURE_NAME),*/
-		"RingModulator", "Ring Modulator");
+	p->addModel(rack::createModel<RingModulatorWidget>(
+		TOSTRING(JE_MANUFACTURER),
+		"RingModulator", "Ring Modulator",
+		rack::EFFECT_TAG, rack::RING_MODULATOR_TAG
+	));
 }
