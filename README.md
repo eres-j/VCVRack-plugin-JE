@@ -7,20 +7,20 @@ Modules for [VCVRack](https://github.com/VCVRack/Rack).
 
 ## Modules
 
- - Ring Modulator
+- Ring Modulator
   - Audio inputs:
-   - Modulator -> Attenuation -> Polarity (+/both/-)
-   - Carrier -> Attenuation -> Polarity (+/both/-) -> Offset CV -> Offset
+    - Modulator -> Attenuation -> Polarity (+/both/-)
+    - Carrier -> Attenuation -> Polarity (+/both/-) -> Offset CV -> Offset
   - Audio outputs:
-   - Ring modulation
-   - Sum = Carrier + Modulator
-   - Diff = Carrier - Modulator
-   - Min = Sum < Diff ? Sum : Diff
-   - Max = Sum > Diff ? Sum : Diff
+    - Ring modulation
+    - Sum = Carrier + Modulator
+    - Diff = Carrier - Modulator
+    - Min = Sum < Diff ? Sum : Diff
+    - Max = Sum > Diff ? Sum : Diff
   - Diode characteristics:
-   - Vb = Forward bias voltage
-   - Vl = Voltage beyond which the function is linear
-   - Slope = Slope of the linear section
+    - Vb = Forward bias voltage
+    - Vl = Voltage beyond which the function is linear
+    - Slope = Slope of the linear section
 
 ## Building from sources
 
