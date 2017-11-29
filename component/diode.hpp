@@ -27,7 +27,7 @@ public:
 
 	inline void setVb(float newVb)
 	{
-		if (updateIfDifferent(m_vb, newVb))
+		if (meta::updateIfDifferent(m_vb, newVb))
 		{
 			m_vl = m_vl_minus_vb + m_vb;
 			m_vl_vb_denom = 2.f * (m_vl_minus_vb);
@@ -37,7 +37,7 @@ public:
 
 	inline void setVlMinusVb(float newVlMinusVb)
 	{
-		if (updateIfDifferent(m_vl_minus_vb, newVlMinusVb))
+		if (meta::updateIfDifferent(m_vl_minus_vb, newVlMinusVb))
 		{
 			m_vl = m_vl_minus_vb + m_vb;
 			m_vl_vb_denom = 2.f * (m_vl_minus_vb);
@@ -48,7 +48,7 @@ public:
 
 	inline void setH(float newH)
 	{
-		if (updateIfDifferent(m_h, newH))
+		if (meta::updateIfDifferent(m_h, newH))
 		{
 			m_vl_add = m_h * m_vl_minus_vb * m_vl_minus_vb / m_vl_vb_denom;
 			m_h_vl = m_h * m_vl;

@@ -2,10 +2,11 @@
 SOURCES = $(wildcard src/*.cpp)
 SOURCES += $(wildcard common/*.cpp)
 SOURCES += $(wildcard components/*.cpp)
+SOURCES += $(wildcard ext/LambertW/*.cc)
 SOURCES += $(wildcard utils/*.cpp)
 SOURCES += $(wildcard widgets/*.cpp)
 
-FLAGS += -I. -DJE_VERSION=0.5.0 -DJE_MANUFACTURER="Julien Eres"
+FLAGS += -I. -I./ext/LambertW -DJE_VERSION=0.5.1 -DJE_MANUFACTURER="Julien Eres"
 
 include ../../plugin.mk
 

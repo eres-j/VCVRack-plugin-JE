@@ -8,3 +8,9 @@ struct RingModulatorWidget : rack::ModuleWidget
 {
 	RingModulatorWidget();
 };
+
+
+struct WaveFolderWidget : rack::ModuleWidget
+{
+	WaveFolderWidget();
+};

@@ -15,4 +15,10 @@ void init(rack::Plugin *p)
 		"RingModulator", "Ring Modulator",
 		rack::EFFECT_TAG, rack::RING_MODULATOR_TAG
 	));
+
+	p->addModel(rack::createModel<WaveFolderWidget>(
+		TOSTRING(JE_MANUFACTURER),
+		"SimpleWaveFolder", "Simple Wave Folder",
+		rack::EFFECT_TAG, rack::WAVESHAPER_TAG
+	));
 }
