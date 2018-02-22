@@ -6,12 +6,15 @@ SOURCES += $(wildcard ext/LambertW/*.cc)
 SOURCES += $(wildcard utils/*.cpp)
 SOURCES += $(wildcard widgets/*.cpp)
 
-FLAGS += -I. -I./ext/LambertW -DJE_VERSION=0.5.1 -DJE_MANUFACTURER="Julien Eres"
+# FLAGS += -I. -I./ext/LambertW -DJE_VERSION=0.6.0dev -DJE_MANUFACTURER="Julien Eres"
+FLAGS += -I. -I./ext/LambertW
 
-include ../../plugin.mk
+SLUG = JE
+VERSION = 0.6.0dev
 
-dist: all
-	mkdir -p dist/JE
-	cp LICENSE* dist/JE/
-	cp plugin.* dist/JE/
-	cp -R res dist/JE/
+SOURCES += $(wildcard src/*.cpp)
+
+DISTRIBUTABLES += $(wildcard LICENSE*) res
+
+RACK_DIR ?= ../..
+include $(RACK_DIR)/plugin.mk

@@ -142,10 +142,16 @@ private:
 	Diode m_diode;
 };
 
-RingModulatorWidget::RingModulatorWidget()
+struct RingModulatorWidget : rack::ModuleWidget
+{
+	RingModulatorWidget(RingModulator *module);
+};
+
+RingModulatorWidget::RingModulatorWidget(RingModulator *module) : ModuleWidget(module) {
+/*RingModulatorWidget::RingModulatorWidget()
 {
 	RingModulator* module = new RingModulator();
-	setModule(module);
+	setModule(module);*/
 	box.size = rack::Vec(15*10, 380);
 
 	{
@@ -155,10 +161,10 @@ RingModulatorWidget::RingModulatorWidget()
 		addChild(panel);
 	}
 
-	addChild(rack::createScrew<rack::ScrewBlack>(rack::Vec(15, 0)));
-	addChild(rack::createScrew<rack::ScrewBlack>(rack::Vec(box.size.x-30, 0)));
-	addChild(rack::createScrew<rack::ScrewBlack>(rack::Vec(15, 365)));
-	addChild(rack::createScrew<rack::ScrewBlack>(rack::Vec(box.size.x-30, 365)));
+	addChild(rack::Widget::create<rack::ScrewBlack>(rack::Vec(15, 0)));
+	addChild(rack::Widget::create<rack::ScrewBlack>(rack::Vec(box.size.x-30, 0)));
+	addChild(rack::Widget::create<rack::ScrewBlack>(rack::Vec(15, 365)));
+	addChild(rack::Widget::create<rack::ScrewBlack>(rack::Vec(box.size.x-30, 365)));
 
 	const float switchX = box.size.x - 40.f;
 
@@ -167,36 +173,36 @@ RingModulatorWidget::RingModulatorWidget()
 	float portY = 63.f;
 	float knobY = 57.f;
 	float switchY = 54.f;
-	addInput(rack::createInput<rack::PJ301MPort>(rack::Vec(9, portY), module, RingModulator::INPUT_INPUT));
-	addParam(rack::createParam<rack::RoundBlackKnob>(rack::Vec(54, knobY), module, RingModulator::INPUT_LEVEL_PARAM, 0.0, 1.0, 1.0));
-	addParam(rack::createParam<rack::NKK>(rack::Vec(switchX, switchY), module, RingModulator::INPUT_POLARITY_PARAM, 0.0, 2.0, 1.0));
+	addInput(rack::Port::create<rack::PJ301MPort>(rack::Vec(9, portY), Port::INPUT, module, RingModulator::INPUT_INPUT));
+	addParam(rack::ParamWidget::create<rack::RoundBlackKnob>(rack::Vec(54, knobY), module, RingModulator::INPUT_LEVEL_PARAM, 0.0, 1.0, 1.0));
+	addParam(rack::ParamWidget::create<rack::NKK>(rack::Vec(switchX, switchY), module, RingModulator::INPUT_POLARITY_PARAM, 0.0, 2.0, 1.0));
 
 	portY += yOffset;
 	knobY += yOffset;
 	switchY += yOffset;
-	addInput(rack::createInput<rack::PJ301MPort>(rack::Vec(9, portY), module, RingModulator::CARRIER_INPUT));
-	addParam(rack::createParam<rack::RoundBlackKnob>(rack::Vec(54, knobY), module, RingModulator::CARRIER_LEVEL_PARAM, 0.0, 1.0, 1.0));
-	addParam(rack::createParam<rack::NKK>(rack::Vec(switchX, switchY), module, RingModulator::CARRIER_POLARITY_PARAM, 0.0, 2.0, 1.0));
+	addInput(rack::Port::create<rack::PJ301MPort>(rack::Vec(9, portY), Port::INPUT, module, RingModulator::CARRIER_INPUT));
+	addParam(rack::ParamWidget::create<rack::RoundBlackKnob>(rack::Vec(54, knobY), module, RingModulator::CARRIER_LEVEL_PARAM, 0.0, 1.0, 1.0));
+	addParam(rack::ParamWidget::create<rack::NKK>(rack::Vec(switchX, switchY), module, RingModulator::CARRIER_POLARITY_PARAM, 0.0, 2.0, 1.0));
 
 	portY += yOffset;
 	knobY += yOffset;
 	switchY += yOffset;
-	addInput(rack::createInput<rack::PJ301MPort>(rack::Vec(9, portY), module, RingModulator::CARRIER_OFFSET_INPUT));
-	addParam(rack::createParam<rack::RoundBlackKnob>(rack::Vec(54, knobY), module, RingModulator::CARRIER_OFFSET_PARAM, -g_controlPeakVoltage, g_controlPeakVoltage, 0.0));
-	addOutput(rack::createOutput<rack::PJ301MPort>(rack::Vec(box.size.x-34, portY), module, RingModulator::RING_OUTPUT));
+	addInput(rack::Port::create<rack::PJ301MPort>(rack::Vec(9, portY), Port::INPUT, module, RingModulator::CARRIER_OFFSET_INPUT));
+	addParam(rack::ParamWidget::create<rack::RoundBlackKnob>(rack::Vec(54, knobY), module, RingModulator::CARRIER_OFFSET_PARAM, -g_controlPeakVoltage, g_controlPeakVoltage, 0.0));
+	addOutput(rack::Port::create<rack::PJ301MPort>(rack::Vec(box.size.x-34, portY), Port::OUTPUT, module, RingModulator::RING_OUTPUT));
 
 	portY += yOffset;
 	knobY += yOffset;
 	switchY += yOffset;
 	float xOffset = 35.f;
 	float x = 9.f;
-	addOutput(rack::createOutput<rack::PJ301MPort>(rack::Vec(x, portY), module, RingModulator::SUM_OUTPUT));
+	addOutput(rack::Port::create<rack::PJ301MPort>(rack::Vec(x, portY), Port::OUTPUT, module, RingModulator::SUM_OUTPUT));
 	x += xOffset;
-	addOutput(rack::createOutput<rack::PJ301MPort>(rack::Vec(x, portY), module, RingModulator::DIFF_OUTPUT));
+	addOutput(rack::Port::create<rack::PJ301MPort>(rack::Vec(x, portY), Port::OUTPUT, module, RingModulator::DIFF_OUTPUT));
 	x += xOffset;
-	addOutput(rack::createOutput<rack::PJ301MPort>(rack::Vec(x, portY), module, RingModulator::MIN_OUTPUT));
+	addOutput(rack::Port::create<rack::PJ301MPort>(rack::Vec(x, portY), Port::OUTPUT, module, RingModulator::MIN_OUTPUT));
 	x += xOffset;
-	addOutput(rack::createOutput<rack::PJ301MPort>(rack::Vec(x, portY), module, RingModulator::MAX_OUTPUT));
+	addOutput(rack::Port::create<rack::PJ301MPort>(rack::Vec(x, portY), Port::OUTPUT, module, RingModulator::MAX_OUTPUT));
 
 	portY += yOffset;
 	knobY += yOffset;
@@ -204,9 +210,13 @@ RingModulatorWidget::RingModulatorWidget()
 	const float y = knobY - 6.f;
 	xOffset = 52.f;
 	x = 9.f;
-	addParam(rack::createParam<rack::RoundSmallBlackKnob>(rack::Vec(x, y), module, RingModulator::DIODE_VB_PARAM, std::numeric_limits<float>::epsilon(), g_controlPeakVoltage, 0.2));
+	addParam(rack::ParamWidget::create<rack::RoundSmallBlackKnob>(rack::Vec(x, y), module, RingModulator::DIODE_VB_PARAM, std::numeric_limits<float>::epsilon(), g_controlPeakVoltage, 0.2));
 	x += xOffset;
-	addParam(rack::createParam<rack::RoundSmallBlackKnob>(rack::Vec(x, y), module, RingModulator::DIODE_VL_MINUS_VB_PARAM, std::numeric_limits<float>::epsilon(), g_controlPeakVoltage, 0.5));
+	addParam(rack::ParamWidget::create<rack::RoundSmallBlackKnob>(rack::Vec(x, y), module, RingModulator::DIODE_VL_MINUS_VB_PARAM, std::numeric_limits<float>::epsilon(), g_controlPeakVoltage, 0.5));
 	x += xOffset;
-	addParam(rack::createParam<rack::RoundSmallBlackKnob>(rack::Vec(x, y), module, RingModulator::DIODE_H_PARAM, 0.0, 1.0, 0.9));
+	addParam(rack::ParamWidget::create<rack::RoundSmallBlackKnob>(rack::Vec(x, y), module, RingModulator::DIODE_H_PARAM, 0.0, 1.0, 0.9));
 }
+
+Model *modelRingModulator = Model::create<RingModulator, RingModulatorWidget>(
+/*p->addModel(rack::createModel<RingModulatorWidget>(*/
+	TOSTRING(SLUG), "RingModulator", "Ring Modulator", EFFECT_TAG, RING_MODULATOR_TAG);

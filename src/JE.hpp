@@ -2,15 +2,9 @@
 
 #include "rack.hpp"
 
+using namespace rack;
+
 extern rack::Plugin *plugin;
 
-struct RingModulatorWidget : rack::ModuleWidget
-{
-	RingModulatorWidget();
-};
-
-
-struct WaveFolderWidget : rack::ModuleWidget
-{
-	WaveFolderWidget();
-};
+extern Model *modelRingModulator;
+extern Model *modelWaveFolder;
