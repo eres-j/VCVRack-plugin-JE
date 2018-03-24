@@ -152,14 +152,15 @@ RingModulatorWidget::RingModulatorWidget(RingModulator *module) : ModuleWidget(m
 {
 	RingModulator* module = new RingModulator();
 	setModule(module);*/
-	box.size = rack::Vec(15*10, 380);
+/*	box.size = rack::Vec(15*10, 380);
 
 	{
 		rack::SVGPanel *panel = new rack::SVGPanel();
 		panel->box.size = box.size;
 		panel->setBackground(rack::SVG::load(assetPlugin(plugin, "res/CleanRingModulator.svg")));
 		addChild(panel);
-	}
+	}*/
+	setPanel(SVG::load(assetPlugin(plugin, "res/CleanRingModulator.svg")));
 
 	addChild(rack::Widget::create<rack::ScrewBlack>(rack::Vec(15, 0)));
 	addChild(rack::Widget::create<rack::ScrewBlack>(rack::Vec(box.size.x-30, 0)));

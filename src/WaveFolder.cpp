@@ -152,14 +152,16 @@ WaveFolderWidget::WaveFolderWidget()
 	WaveFolder* module = new WaveFolder();
 	setModule(module);
 */
-	box.size = rack::Vec(15*7, 380);
+/*	box.size = rack::Vec(15*7, 380);
 
 	{
 		rack::SVGPanel *panel = new rack::SVGPanel();
 		panel->box.size = box.size;
 		panel->setBackground(rack::SVG::load(assetPlugin(plugin, "res/CleanWaveFolder.svg")));
 		addChild(panel);
-	}
+	}*/
+	setPanel(SVG::load(assetPlugin(plugin, "res/CleanWaveFolder.svg")));
+
 
 	addChild(rack::Widget::create<rack::ScrewBlack>(rack::Vec(15, 0)));
 	addChild(rack::Widget::create<rack::ScrewBlack>(rack::Vec(box.size.x-30, 0)));
