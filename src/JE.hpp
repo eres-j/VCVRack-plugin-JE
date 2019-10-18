@@ -1,16 +1,8 @@
 #pragma once
 
-#include "rack0.hpp"
+#include "rack.hpp"
 
-extern rack::Plugin *plugin;
+extern rack::Plugin *pluginInstance;
 
-struct RingModulatorWidget : rack::ModuleWidget
-{
-	RingModulatorWidget();
-};
-
-
-struct WaveFolderWidget : rack::ModuleWidget
-{
-	WaveFolderWidget();
-};
+extern rack::Model* modelRM;
+extern rack::Model* modelWF;

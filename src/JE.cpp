@@ -1,13 +1,11 @@
 #include "JE.hpp"
 
-rack::Plugin* plugin;
+rack::Plugin* pluginInstance;
 
 void init(rack::Plugin *p)
 {
-	plugin = p;
-	plugin->website = "https://github.com/eres-j/VCVRack-plugin-JE";
-	plugin->manual = "https://github.com/eres-j/VCVRack-plugin-JE";
+    pluginInstance = p;
 
-	p->addModel(rack::createModel<RingModulatorWidget>("Ring Modulator"));
-	p->addModel(rack::createModel<WaveFolderWidget>("Wave Folder"));
+	p->addModel(modelRM);
+	p->addModel(modelWF);
 }

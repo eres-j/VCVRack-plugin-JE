@@ -51,8 +51,14 @@ struct WaveFolder : rack::Module
 	};
 
 	WaveFolder()
-	: Module(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS)
-	{}
+	{
+		config(NUM_PARAMS, NUM_INPUTS, NUM_OUTPUTS, NUM_LIGHTS);
+		configParam(INPUT_GAIN_PARAM, 0.f, 1.f, 0.1f, "Input gain");
+		configParam(DC_OFFSET_PARAM, -5.f, 5.f, 0.f, "Input offset");
+		configParam(OUTPUT_GAIN_PARAM, 0.f, 10.f, 1.f, "Output gain");
+		configParam(RESISTOR_PARAM, 10000.f, 100000.f, 15000.f, "Resistor (ohm)");
+		configParam(LOAD_RESISTOR_PARAM, 1000.f, 10000.f, 7500.f, "Load resistor (ohm)");
+	}
 
 	inline float getParameterValue(const ParamIds id) const
 	{
@@ -117,7 +123,7 @@ struct WaveFolder : rack::Module
 		return theta * m_thermalVoltage * utl::LambertW<0>(m_delta * meta::exp(theta * m_beta * in)) - m_alpha * in;
 	}
 
-	inline void step() override
+	inline void process(const ProcessArgs& args) override
 	{
 		if (!needToStep())
 			return;
@@ -140,52 +146,49 @@ private:
 	float m_delta = (m_loadResistor * m_saturationCurrent) / m_thermalVoltage;
 };
 
-WaveFolderWidget::WaveFolderWidget()
+struct WaveFolderWidget : rack::ModuleWidget
 {
-	WaveFolder* module = new WaveFolder();
-	setModule(module);
-	box.size = rack::Vec(15*7, 380);
-
+	WaveFolderWidget(WaveFolder* module)
 	{
-		rack::SVGPanel *panel = new rack::SVGPanel();
-		panel->box.size = box.size;
-		panel->setBackground(rack::SVG::load(assetPlugin(plugin, "res/CleanWaveFolder.svg")));
-		addChild(panel);
+		setModule(module);
+		setPanel(APP->window->loadSvg(rack::asset::plugin(pluginInstance, "res/CleanWaveFolder.svg")));
+
+		addChild(rack::createWidget<rack::ScrewBlack>(rack::Vec(15, 0)));
+		addChild(rack::createWidget<rack::ScrewBlack>(rack::Vec(box.size.x-30, 0)));
+		addChild(rack::createWidget<rack::ScrewBlack>(rack::Vec(15, 365)));
+		addChild(rack::createWidget<rack::ScrewBlack>(rack::Vec(box.size.x-30, 365)));
+
+		float yOffset = 67.f;
+
+		float portY = 63.f;
+		float knobY = 57.f;
+		addInput(rack::createInput<rack::PJ301MPort>(rack::Vec(9, portY), module, WaveFolder::INPUT_GAIN_INPUT));
+		addParam(rack::createParam<rack::RoundBlackKnob>(rack::Vec(54, knobY), module, WaveFolder::INPUT_GAIN_PARAM));
+
+		portY += yOffset;
+		knobY += yOffset;
+		addInput(rack::createInput<rack::PJ301MPort>(rack::Vec(9, portY), module, WaveFolder::DC_OFFSET_INPUT));
+		addParam(rack::createParam<rack::RoundBlackKnob>(rack::Vec(54, knobY), module, WaveFolder::DC_OFFSET_PARAM));
+
+		portY += yOffset;
+		knobY += yOffset;
+		addInput(rack::createInput<rack::PJ301MPort>(rack::Vec(9, portY), module, WaveFolder::OUTPUT_GAIN_INPUT));
+		addParam(rack::createParam<rack::RoundBlackKnob>(rack::Vec(54, knobY), module, WaveFolder::OUTPUT_GAIN_PARAM));
+
+		portY += yOffset;
+		knobY += yOffset;
+		addInput(rack::createInput<rack::PJ301MPort>(rack::Vec(18, portY), module, WaveFolder::INPUT_INPUT));
+		addOutput(rack::createOutput<rack::PJ301MPort>(rack::Vec(box.size.x-43, portY), module, WaveFolder::OUTPUT_OUTPUT));
+
+		portY += yOffset;
+		knobY += yOffset;
+		const float y = knobY - 6.f;
+		float xOffset = 52.f;
+		float x = 9.f;
+		addParam(rack::createParam<rack::RoundSmallBlackKnob>(rack::Vec(x, y), module, WaveFolder::RESISTOR_PARAM));
+		x += xOffset;
+		addParam(rack::createParam<rack::RoundSmallBlackKnob>(rack::Vec(x, y), module, WaveFolder::LOAD_RESISTOR_PARAM));
 	}
+};
 
-	addChild(rack::createScrew<rack::ScrewBlack>(rack::Vec(15, 0)));
-	addChild(rack::createScrew<rack::ScrewBlack>(rack::Vec(box.size.x-30, 0)));
-	addChild(rack::createScrew<rack::ScrewBlack>(rack::Vec(15, 365)));
-	addChild(rack::createScrew<rack::ScrewBlack>(rack::Vec(box.size.x-30, 365)));
-
-	float yOffset = 67.f;
-
-	float portY = 63.f;
-	float knobY = 57.f;
-	addInput(rack::createInput<rack::PJ301MPort>(rack::Vec(9, portY), module, WaveFolder::INPUT_GAIN_INPUT));
-	addParam(rack::createParam<rack::RoundBlackKnob>(rack::Vec(54, knobY), module, WaveFolder::INPUT_GAIN_PARAM, 0.0, 1.0, 0.1));
-
-	portY += yOffset;
-	knobY += yOffset;
-	addInput(rack::createInput<rack::PJ301MPort>(rack::Vec(9, portY), module, WaveFolder::DC_OFFSET_INPUT));
-	addParam(rack::createParam<rack::RoundBlackKnob>(rack::Vec(54, knobY), module, WaveFolder::DC_OFFSET_PARAM, -5.0, 5.0, 0.0));
-
-	portY += yOffset;
-	knobY += yOffset;
-	addInput(rack::createInput<rack::PJ301MPort>(rack::Vec(9, portY), module, WaveFolder::OUTPUT_GAIN_INPUT));
-	addParam(rack::createParam<rack::RoundBlackKnob>(rack::Vec(54, knobY), module, WaveFolder::OUTPUT_GAIN_PARAM, 0.0, 10.0, 1.0));
-
-	portY += yOffset;
-	knobY += yOffset;
-	addInput(rack::createInput<rack::PJ301MPort>(rack::Vec(18, portY), module, WaveFolder::INPUT_INPUT));
-	addOutput(rack::createOutput<rack::PJ301MPort>(rack::Vec(box.size.x-43, portY), module, WaveFolder::OUTPUT_OUTPUT));
-
-	portY += yOffset;
-	knobY += yOffset;
-	const float y = knobY - 6.f;
-	float xOffset = 52.f;
-	float x = 9.f;
-	addParam(rack::createParam<rack::RoundSmallBlackKnob>(rack::Vec(x, y), module, WaveFolder::RESISTOR_PARAM, 10000.f, 100000.f, 15000.f));
-	x += xOffset;
-	addParam(rack::createParam<rack::RoundSmallBlackKnob>(rack::Vec(x, y), module, WaveFolder::LOAD_RESISTOR_PARAM, 1000.f, 10000.f, 7500.f));
-}
+rack::Model* modelWF = rack::createModel<WaveFolder, WaveFolderWidget>("WF");
