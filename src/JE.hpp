@@ -1,6 +1,6 @@
 #pragma once
 
-#include "rack.hpp"
+#include "rack0.hpp"
 
 extern rack::Plugin *plugin;
 
