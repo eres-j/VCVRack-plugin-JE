@@ -151,7 +151,7 @@ struct WaveFolderWidget : rack::ModuleWidget
 	WaveFolderWidget(WaveFolder* module)
 	{
 		setModule(module);
-		setPanel(APP->window->loadSvg(rack::asset::plugin(pluginInstance, "res/CleanWaveFolder.svg")));
+		setPanel(rack::APP->window->loadSvg(rack::asset::plugin(pluginInstance, "res/CleanWaveFolder.svg")));
 
 		addChild(rack::createWidget<rack::ScrewBlack>(rack::Vec(15, 0)));
 		addChild(rack::createWidget<rack::ScrewBlack>(rack::Vec(box.size.x-30, 0)));

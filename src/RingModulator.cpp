@@ -156,7 +156,7 @@ struct RingModulatorWidget : rack::ModuleWidget
 	RingModulatorWidget(RingModulator* module)
 	{
 		setModule(module);
-		setPanel(APP->window->loadSvg(rack::asset::plugin(pluginInstance, "res/CleanRingModulator.svg")));
+		setPanel(rack::APP->window->loadSvg(rack::asset::plugin(pluginInstance, "res/CleanRingModulator.svg")));
 
 		addChild(rack::createWidget<rack::ScrewBlack>(rack::Vec(15, 0)));
 		addChild(rack::createWidget<rack::ScrewBlack>(rack::Vec(box.size.x-30, 0)));
